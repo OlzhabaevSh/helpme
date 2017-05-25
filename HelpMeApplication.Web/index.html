@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/bootstrap-theme.min.css" rel="stylesheet" />
+</head>
+<body ng-app="helpMeMdl" ng-controller="helpMeCtrl as ctrl" ng-init="ctrl.init()">
+
+    <div class="container">
+
+        <div class="row" ng-if="ctrl.state == 0">
+            <div class="col-md-4">
+                <p>
+                    <b>Login</b> <input class="form-control" ng-model="ctrl.user.name" />
+
+                </p>
+                <p>
+                    <button class="btn btn-primary" ng-click="ctrl.login()">Login</button>
+                </p>
+            </div>
+        </div>
+
+        <div class="row" ng-if="ctrl.state != 0">
+            <div class="col-md-4">
+                <h2>Tickets <small><a href="#" ng-click="ctrl.create()"><span class="glyphicon glyphicon-plus-sign text-success"></span></a><a href="#" ng-click="ctrl.deleteAll()"><span class="glyphicon glyphicon-remove-circle text-danger"></span></a></small></h2>
+
+                <div class="panel panel-success" ng-if="ctrl.state == 2">
+                    <div class="panel-heading">Create new ticket</div>
+                    <div class="panel-body">
+                        <p>
+                            <b>Title: </b> <input type="text" 
+                                                  class="form-control"
+                                                  ng-model="ctrl.nwTicket.Head"/>
+                        </p>
+                        <p>
+                            <b>Body</b> <textarea class="form-control"
+                                                  ng-model="ctrl.nwTicket.Body"></textarea>
+                        </p>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="#" ng-click="ctrl.submit()"><span class="glyphicon glyphicon-save text-success"></span> Submit</a>
+                    </div>
+                </div>
+
+                <div ng-repeat="item in ctrl.tickets"
+                     class="panel"
+                     ng-class="{'panel-primary': item.Guid == ctrl.selectedTicket.Guid, 'panel-default': item.Guid != ctrl.selectedTicket.Guid}"
+                     ng-click="ctrl.select(item)">
+                    <div class="panel-heading">{{item.Head}}</div>
+                    <div class="panel-body">
+                        {{item.Body}}
+                    </div>
+                    <div class="panel-footer">
+                        <b>Author: </b> {{item.AuthorName}}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-8" ng-if="ctrl.state == 3">
+                <h2>Details: </h2>
+                <div class="panel panel-success">
+                    <div class="panel-heading">{{ctrl.selectedTicket.AuthorName}}: {{ctrl.selectedTicket.Head}}</div>
+                    <div class="panel-body">
+                        <p>
+                            <b>Body: </b>
+                        </p>
+                        <p>
+                            {{ctrl.selectedTicket.Body}}
+                        </p>
+                        <hr />
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Author</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in ctrl.selectedTicket.Comments">
+                                    <td>{{item.AuthorName}}</td>
+                                    <td>{{item.Message}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="text" ng-model="ctrl.nwComment" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <a href="#" ng-click="ctrl.createComment()"><span class="glyphicon glyphicon-save text-success"></span> Submit</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.1.2.min.js"></script>
+    <script src="signalr/hubs"></script>
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script src="Scripts/app.js"></script>
+</body>
+</html>
